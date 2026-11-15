@@ -1,0 +1,2104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Penanggung Jawab Lab &amp; Ruangan - Sistem Inventaris SMKN 4 Bojonegoro</title>
+  
+  <!-- Fonts: Plus Jakarta Sans & Merriweather (for matching mockup serif headings & figures) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  
+  <!-- Bootstrap 5.3.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Custom Slicing Theme matching exact mockups -->
+  <link href="http://localhost:8000/css/admin-theme.css" rel="stylesheet">
+
+  </head>
+<body>
+  <!-- Mobile Offcanvas Backdrop -->
+  <div class="sidebar-overlay" id="sidebarBackdrop" onclick="toggleSidebarMenu()"></div>
+
+  <!-- Sidebar -->
+  <aside id="adminSidebar">
+    <div class="brand">
+      <div class="brand-title">SMKN 4 Bojonegoro</div>
+      <small class="brand-sub">Sistem Inventaris</small>
+    </div>
+
+    <div class="menu-heading">MENU UTAMA</div>
+    
+    <a href="http://localhost:8000/admin/dashboard" class="sidebar-link ">
+      <span class="material-symbols-outlined">grid_view</span>
+      <span>Dashboard</span>
+    </a>
+    
+    <a href="http://localhost:8000/admin/barang" class="sidebar-link ">
+      <span class="material-symbols-outlined">inventory_2</span>
+      <span>Data Barang</span>
+    </a>
+    
+    <a href="http://localhost:8000/admin/kategori" class="sidebar-link ">
+      <span class="material-symbols-outlined">label</span>
+      <span>Kategori</span>
+    </a>
+    
+    <a href="http://localhost:8000/admin/ruangan" class="sidebar-link ">
+      <span class="material-symbols-outlined">meeting_room</span>
+      <span>Data Ruangan</span>
+    </a>
+    
+    <a href="http://localhost:8000/admin/penanggung-jawab" class="sidebar-link ">
+      <span class="material-symbols-outlined">badge</span>
+      <span>Penanggung Jawab</span>
+    </a>
+    
+    <a href="http://localhost:8000/admin/laporan-masuk" class="sidebar-link ">
+      <span class="material-symbols-outlined">mark_email_unread</span>
+      <span class="flex-grow-1">Laporan Masuk</span>
+      <span class="badge rounded-pill bg-danger badge-unread-laporan" style="font-size: 10px; padding: 2px 6px;">1</span>
+    </a>
+
+    <a href="http://localhost:8000/admin/laporan" class="sidebar-link ">
+      <span class="material-symbols-outlined">description</span>
+      <span>Laporan</span>
+    </a>
+
+    <!-- Logout at bottom -->
+    <a href="http://localhost:8000/logout" class="logout-link">
+      <span class="material-symbols-outlined">logout</span>
+      <span>Keluar Sistem</span>
+    </a>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <header class="top-navbar">
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-sm btn-light border d-lg-none p-1 px-2" type="button" onclick="toggleSidebarMenu()" aria-label="Toggle Menu">
+          <span class="material-symbols-outlined fs-5">menu</span>
+        </button>
+        <div class="breadcrumb-nav">
+          <span class="material-symbols-outlined" style="font-size:18px">home</span>
+          <span>/</span>
+          <b>Inventaris Sekolah</b>
+        </div>
+      </div>
+
+      <div class="user-box" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalGantiFotoProfil" title="Klik untuk ganti foto profil">
+        <img src="https://ui-avatars.com/api/?name=Admin&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Admin" class="avatar-img" onerror="this.outerHTML='<div class=\'avatar-img d-grid place-items-center bg-secondary text-white fw-bold\'>A</div>'">
+        <div>
+          <div class="user-name">Admin</div>
+          <small class="user-role">Administrator Sarpras</small>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-grow-1">
+      <div class="page-container">
+                                <!-- Page Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+  <div>
+    <div class="page-breadcrumb">
+      <span>Home</span>
+      <span>/</span>
+      <span>Inventaris Sekolah</span>
+      <span>/</span>
+      <b class="active-crumb">Penanggung Jawab</b>
+    </div>
+    <h1 class="page-title">Data Penanggung Jawab Lab &amp; Ruangan</h1>
+    <p class="page-subtitle">Daftar guru, kepala lab &amp; wali kelas penanggung jawab sarpras SMKN 4 Bojonegoro.</p>
+  </div>
+  <div class="d-flex gap-2 align-items-center">
+    <button type="button" class="btn-navy-slicing shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambahPJ">
+      <span class="material-symbols-outlined fs-5">person_add</span>
+      <span>Tambah Penanggung Jawab</span>
+    </button>
+  </div>
+</div>
+
+<!-- Flash Notifications -->
+
+
+<!-- 3 Stat Mini Cards -->
+<div class="row g-3 mb-3">
+  <div class="col-12 col-sm-6 col-lg-4">
+    <div class="card-slicing stat-box">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <span class="stat-box-title">TOTAL PENANGGUNG JAWAB</span>
+          <div class="stat-box-num">15 <small>Orang</small></div>
+        </div>
+        <div class="stat-icon-sq" style="background: #e0edff; color: #002366;">
+          <span class="material-symbols-outlined fs-4">badge</span>
+        </div>
+      </div>
+      <div class="stat-box-footer">
+        <span><span class="material-symbols-outlined fs-6 align-text-bottom text-primary">domain</span> Tersebar di Ruangan Sekolah</span>
+        <b class="text-primary font-monospace">15 Ruang</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6 col-lg-4">
+    <div class="card-slicing stat-box">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <span class="stat-box-title">JURUSAN KEJURUAN</span>
+          <div class="stat-box-num">6 <small>Konsentrasi</small></div>
+        </div>
+        <div class="stat-icon-sq" style="background: #e0f2fe; color: #0284c7;">
+          <span class="material-symbols-outlined fs-4">school</span>
+        </div>
+      </div>
+      <div class="stat-box-footer">
+        <span>TP, GP, RPL, KL, PH, ATR</span>
+        <b class="text-info font-monospace">Terintegrasi</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6 col-lg-4">
+    <div class="card-slicing stat-box">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <span class="stat-box-title">STATUS AKUN PENANGGUNG JAWAB</span>
+          <div class="stat-box-num" style="color: #15803d;">100% <small style="color: #15803d;">Aktif</small></div>
+        </div>
+        <div class="stat-icon-sq" style="background: #dcfce7; color: #15803d;">
+          <span class="material-symbols-outlined fs-4">verified_user</span>
+        </div>
+      </div>
+      <div class="stat-box-footer">
+        <span>Login Mandiri via NIP Guru</span>
+        <b class="text-success font-monospace">Valid</b>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Search & Filter Form -->
+<form method="GET" action="http://localhost:8000/admin/penanggung-jawab" class="filter-card mb-3">
+  <div class="row g-2 align-items-center">
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="position-relative">
+        <span class="material-symbols-outlined position-absolute" style="left: 10px; top: 9px; color: #94a3b8; font-size: 19px;">search</span>
+        <input type="text" name="search" value="" class="filter-input w-100 ps-5" placeholder="Cari nama, NIP, jurusan, atau jabatan...">
+      </div>
+    </div>
+    <div class="col-6 col-md-3 col-lg-3">
+      <select name="jurusan" class="filter-select w-100">
+        <option value="">Semua Jurusan / Unit</option>
+        <option value="RPL" >RPL</option>
+        <option value="TP" >TP (Pengelasan)</option>
+        <option value="GP" >GP (Geologi Pertambangan)</option>
+        <option value="KL" >KL (Kuliner)</option>
+        <option value="PH" >PH (Perhotelan)</option>
+        <option value="ATR" >ATR (Peternakan)</option>
+        <option value="Umum" >Umum / Non-Kejuruan</option>
+      </select>
+    </div>
+    <div class="col-6 col-md-3 col-lg-3 d-flex gap-2">
+      <button type="submit" class="btn btn-primary btn-sm flex-grow-1" style="background:#002366; border-color:#002366;">
+        <span class="material-symbols-outlined fs-6 align-middle">filter_alt</span> Filter
+      </button>
+      <a href="http://localhost:8000/admin/penanggung-jawab" class="btn btn-light btn-sm border" title="Reset">
+        <span class="material-symbols-outlined fs-6 align-middle">restart_alt</span>
+      </a>
+    </div>
+  </div>
+</form>
+
+<!-- Table Card -->
+<div class="card-slicing overflow-hidden">
+  <div class="table-responsive">
+    <table class="table-slicing" id="tablePJ">
+      <thead>
+        <tr>
+          <th class="ps-4" style="width: 45px;">NO</th>
+          <th style="min-width: 260px;">PROFIL PENANGGUNG JAWAB</th>
+          <th>JABATAN</th>
+          <th>RUANGAN YANG DIKELOLA</th>
+          <th>JURUSAN</th>
+          <th>KONTAK &amp; EMAIL</th>
+          <th class="text-center" style="width: 90px;">STATUS</th>
+          <th class="pe-4 text-end" style="width: 120px;">AKSI</th>
+        </tr>
+      </thead>
+      <tbody>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">1</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Agus+Salim%2C+S.Pt.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Agus Salim, S.Pt." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>AS</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Agus Salim, S.Pt.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19870529 201101 1 016</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">Wali Kelas X ATR</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">school</span>
+                  <span>Ruang Kelas X ATR</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">ATR</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0813-8899-0011</div>
+            <div class="text-muted small" style="font-size: 10.5px;">agus.salim@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-17">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-17">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-17" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Agus Salim, S.Pt.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/17" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Agus+Salim%2C+S.Pt.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Agus Salim, S.Pt." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19870529 201101 1 016" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="Wali Kelas X ATR" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" >RPL</option>
+                            <option value="TP" >TP (Pengelasan)</option>
+                            <option value="GP" >GP (Geologi Pertambangan)</option>
+                            <option value="KL" >KL (Kuliner)</option>
+                            <option value="PH" >PH (Perhotelan)</option>
+                            <option value="ATR" selected>ATR (Peternakan)</option>
+                            <option value="Umum" >Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0813-8899-0011" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="agus.salim@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-17" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/17" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Agus Salim, S.Pt.?</p>
+                  <small class="text-muted">NIP: 19870529 201101 1 016. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">2</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Dimas+Pratama%2C+S.Pd.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Dimas Pratama, S.Pd." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>DP</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Dimas Pratama, S.Pd.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19901103 201504 1 008</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">Wali Kelas X PH</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">school</span>
+                  <span>Ruang Kelas X PH</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">PH</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0812-7788-9900</div>
+            <div class="text-muted small" style="font-size: 10.5px;">dimas.pratama@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-16">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-16">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-16" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Dimas Pratama, S.Pd.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/16" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Dimas+Pratama%2C+S.Pd.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Dimas Pratama, S.Pd." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19901103 201504 1 008" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="Wali Kelas X PH" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" >RPL</option>
+                            <option value="TP" >TP (Pengelasan)</option>
+                            <option value="GP" >GP (Geologi Pertambangan)</option>
+                            <option value="KL" >KL (Kuliner)</option>
+                            <option value="PH" selected>PH (Perhotelan)</option>
+                            <option value="ATR" >ATR (Peternakan)</option>
+                            <option value="Umum" >Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0812-7788-9900" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="dimas.pratama@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-16" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/16" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Dimas Pratama, S.Pd.?</p>
+                  <small class="text-muted">NIP: 19901103 201504 1 008. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">3</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Anisa+Putri%2C+S.Pd.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Anisa Putri, S.Pd." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>AP</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Anisa Putri, S.Pd.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19920115 201903 2 010</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">Wali Kelas X KL</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">school</span>
+                  <span>Ruang Kelas X KL</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">KL</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0857-6677-8899</div>
+            <div class="text-muted small" style="font-size: 10.5px;">anisa.putri@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-15">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-15">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-15" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Anisa Putri, S.Pd.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/15" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Anisa+Putri%2C+S.Pd.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Anisa Putri, S.Pd." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19920115 201903 2 010" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="Wali Kelas X KL" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" >RPL</option>
+                            <option value="TP" >TP (Pengelasan)</option>
+                            <option value="GP" >GP (Geologi Pertambangan)</option>
+                            <option value="KL" selected>KL (Kuliner)</option>
+                            <option value="PH" >PH (Perhotelan)</option>
+                            <option value="ATR" >ATR (Peternakan)</option>
+                            <option value="Umum" >Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0857-6677-8899" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="anisa.putri@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-15" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/15" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Anisa Putri, S.Pd.?</p>
+                  <small class="text-muted">NIP: 19920115 201903 2 010. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">4</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Dewi+Lestari%2C+S.T.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Dewi Lestari, S.T." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>DL</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Dewi Lestari, S.T.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19890412 201402 2 007</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">Wali Kelas X GP</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">school</span>
+                  <span>Ruang Kelas X GP</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">GP</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0821-5566-7788</div>
+            <div class="text-muted small" style="font-size: 10.5px;">dewi.lestari@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-14">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-14">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-14" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Dewi Lestari, S.T.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/14" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Dewi+Lestari%2C+S.T.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Dewi Lestari, S.T." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19890412 201402 2 007" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="Wali Kelas X GP" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" >RPL</option>
+                            <option value="TP" >TP (Pengelasan)</option>
+                            <option value="GP" selected>GP (Geologi Pertambangan)</option>
+                            <option value="KL" >KL (Kuliner)</option>
+                            <option value="PH" >PH (Perhotelan)</option>
+                            <option value="ATR" >ATR (Peternakan)</option>
+                            <option value="Umum" >Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0821-5566-7788" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="dewi.lestari@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-14" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/14" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Dewi Lestari, S.T.?</p>
+                  <small class="text-muted">NIP: 19890412 201402 2 007. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">5</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Budi+Santoso%2C+S.Pd.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Budi Santoso, S.Pd." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>BS</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Budi Santoso, S.Pd.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19830820 200901 1 011</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">Wali Kelas X TP</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">school</span>
+                  <span>Ruang Kelas X TP</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">TP</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0813-4455-6677</div>
+            <div class="text-muted small" style="font-size: 10.5px;">budi.santoso.tp@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-13">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-13">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-13" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Budi Santoso, S.Pd.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/13" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Budi+Santoso%2C+S.Pd.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Budi Santoso, S.Pd." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19830820 200901 1 011" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="Wali Kelas X TP" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" >RPL</option>
+                            <option value="TP" selected>TP (Pengelasan)</option>
+                            <option value="GP" >GP (Geologi Pertambangan)</option>
+                            <option value="KL" >KL (Kuliner)</option>
+                            <option value="PH" >PH (Perhotelan)</option>
+                            <option value="ATR" >ATR (Peternakan)</option>
+                            <option value="Umum" >Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0813-4455-6677" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="budi.santoso.tp@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-13" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/13" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Budi Santoso, S.Pd.?</p>
+                  <small class="text-muted">NIP: 19830820 200901 1 011. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">6</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Hendra+Wijaya%2C+S.Kom.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Hendra Wijaya, S.Kom." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>HW</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Hendra Wijaya, S.Kom.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19850214 201001 1 015</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">Wali Kelas X RPL</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">school</span>
+                  <span>Ruang Kelas X RPL</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">RPL</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0812-1122-3344</div>
+            <div class="text-muted small" style="font-size: 10.5px;">hendra.wijaya@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-12">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-12">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-12" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Hendra Wijaya, S.Kom.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/12" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Hendra+Wijaya%2C+S.Kom.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Hendra Wijaya, S.Kom." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19850214 201001 1 015" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="Wali Kelas X RPL" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" selected>RPL</option>
+                            <option value="TP" >TP (Pengelasan)</option>
+                            <option value="GP" >GP (Geologi Pertambangan)</option>
+                            <option value="KL" >KL (Kuliner)</option>
+                            <option value="PH" >PH (Perhotelan)</option>
+                            <option value="ATR" >ATR (Peternakan)</option>
+                            <option value="Umum" >Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0812-1122-3344" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="hendra.wijaya@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-12" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/12" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Hendra Wijaya, S.Kom.?</p>
+                  <small class="text-muted">NIP: 19850214 201001 1 015. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">7</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Bambang+Nugroho%2C+S.AP.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Bambang Nugroho, S.AP." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>BN</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Bambang Nugroho, S.AP.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19780622 200701 1 009</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">PJ Tata Usaha</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">badge</span>
+                  <span>Ruang Tata Usaha</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">Umum</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0822-9012-3456</div>
+            <div class="text-muted small" style="font-size: 10.5px;">bambang.nugroho@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-11">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-11">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-11" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Bambang Nugroho, S.AP.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/11" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Bambang+Nugroho%2C+S.AP.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Bambang Nugroho, S.AP." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19780622 200701 1 009" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="PJ Tata Usaha" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" >RPL</option>
+                            <option value="TP" >TP (Pengelasan)</option>
+                            <option value="GP" >GP (Geologi Pertambangan)</option>
+                            <option value="KL" >KL (Kuliner)</option>
+                            <option value="PH" >PH (Perhotelan)</option>
+                            <option value="ATR" >ATR (Peternakan)</option>
+                            <option value="Umum" selected>Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0822-9012-3456" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="bambang.nugroho@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-11" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/11" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Bambang Nugroho, S.AP.?</p>
+                  <small class="text-muted">NIP: 19780622 200701 1 009. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">8</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Lestari+Wahyuni%2C+S.I.Pust.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Lestari Wahyuni, S.I.Pust." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>LW</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Lestari Wahyuni, S.I.Pust.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19851104 201101 2 011</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">PJ Perpustakaan</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">local_library</span>
+                  <span>Perpustakaan Sekolah</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">Umum</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0813-8901-2345</div>
+            <div class="text-muted small" style="font-size: 10.5px;">lestari.wahyuni@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-10">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-10">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-10" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Lestari Wahyuni, S.I.Pust.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/10" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Lestari+Wahyuni%2C+S.I.Pust.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Lestari Wahyuni, S.I.Pust." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19851104 201101 2 011" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="PJ Perpustakaan" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" >RPL</option>
+                            <option value="TP" >TP (Pengelasan)</option>
+                            <option value="GP" >GP (Geologi Pertambangan)</option>
+                            <option value="KL" >KL (Kuliner)</option>
+                            <option value="PH" >PH (Perhotelan)</option>
+                            <option value="ATR" >ATR (Peternakan)</option>
+                            <option value="Umum" selected>Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0813-8901-2345" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="lestari.wahyuni@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-10" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/10" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Lestari Wahyuni, S.I.Pust.?</p>
+                  <small class="text-muted">NIP: 19851104 201101 2 011. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">9</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Siti+Rahmawati%2C+S.Pd.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Siti Rahmawati, S.Pd." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>SR</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Siti Rahmawati, S.Pd.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19790514 200501 2 008</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">PJ Ruang Guru</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">groups</span>
+                  <span>Ruang Guru</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">Umum</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0856-7890-2345</div>
+            <div class="text-muted small" style="font-size: 10.5px;">siti.rahmawati@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-9">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-9">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-9" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Siti Rahmawati, S.Pd.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/9" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Siti+Rahmawati%2C+S.Pd.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Siti Rahmawati, S.Pd." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19790514 200501 2 008" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="PJ Ruang Guru" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" >RPL</option>
+                            <option value="TP" >TP (Pengelasan)</option>
+                            <option value="GP" >GP (Geologi Pertambangan)</option>
+                            <option value="KL" >KL (Kuliner)</option>
+                            <option value="PH" >PH (Perhotelan)</option>
+                            <option value="ATR" >ATR (Peternakan)</option>
+                            <option value="Umum" selected>Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0856-7890-2345" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="siti.rahmawati@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-9" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/9" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Siti Rahmawati, S.Pd.?</p>
+                  <small class="text-muted">NIP: 19790514 200501 2 008. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">10</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Drh.+Tri+Wibowo%2C+S.Pt.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Drh. Tri Wibowo, S.Pt." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>DT</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Drh. Tri Wibowo, S.Pt.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19810419 200604 1 012</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">Kepala Kandang ATR</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">agriculture</span>
+                  <span>Kandang Teaching Farm ATR</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">ATR</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0812-7890-1234</div>
+            <div class="text-muted small" style="font-size: 10.5px;">tri.wibowo@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-8">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-8">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-8" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Drh. Tri Wibowo, S.Pt.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/8" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Drh.+Tri+Wibowo%2C+S.Pt.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Drh. Tri Wibowo, S.Pt." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19810419 200604 1 012" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="Kepala Kandang ATR" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" >RPL</option>
+                            <option value="TP" >TP (Pengelasan)</option>
+                            <option value="GP" >GP (Geologi Pertambangan)</option>
+                            <option value="KL" >KL (Kuliner)</option>
+                            <option value="PH" >PH (Perhotelan)</option>
+                            <option value="ATR" selected>ATR (Peternakan)</option>
+                            <option value="Umum" >Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0812-7890-1234" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="tri.wibowo@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-8" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/8" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Drh. Tri Wibowo, S.Pt.?</p>
+                  <small class="text-muted">NIP: 19810419 200604 1 012. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">11</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Rina+Kusuma%2C+S.ST.Par.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Rina Kusuma, S.ST.Par." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>RK</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Rina Kusuma, S.ST.Par.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19861025 201001 2 018</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">Kepala Edotel PH</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">hotel</span>
+                  <span>Edotel &amp; Praktik PH</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">PH</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0857-1234-5678</div>
+            <div class="text-muted small" style="font-size: 10.5px;">rina.kusuma@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-7">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-7">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-7" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Rina Kusuma, S.ST.Par.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/7" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Rina+Kusuma%2C+S.ST.Par.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Rina Kusuma, S.ST.Par." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19861025 201001 2 018" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="Kepala Edotel PH" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" >RPL</option>
+                            <option value="TP" >TP (Pengelasan)</option>
+                            <option value="GP" >GP (Geologi Pertambangan)</option>
+                            <option value="KL" >KL (Kuliner)</option>
+                            <option value="PH" selected>PH (Perhotelan)</option>
+                            <option value="ATR" >ATR (Peternakan)</option>
+                            <option value="Umum" >Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0857-1234-5678" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="rina.kusuma@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-7" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/7" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Rina Kusuma, S.ST.Par.?</p>
+                  <small class="text-muted">NIP: 19861025 201001 2 018. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+                <tr>
+          <td class="ps-4 text-muted fw-semibold">12</td>
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://ui-avatars.com/api/?name=Chef+Maya+Anggraini%2C+S.Pd.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Chef Maya Anggraini, S.Pd." class="avatar-img" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #002366;" onerror="this.outerHTML='<div class=\'avatar-placeholder-sm\' style=\'background: #002366; color: #ffffff;\'>CM</div>'">
+              <div>
+                <b class="text-dark d-block" style="font-size: 13px;">Chef Maya Anggraini, S.Pd.</b>
+                <div class="text-muted small font-monospace" style="font-size: 11px;">NIP. 19880715 201204 2 006</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="fw-semibold text-dark">Kepala Dapur Kuliner</span></td>
+          <td>
+                                                      <span class="badge mb-1 d-inline-flex align-items-center gap-1" style="background: #e0edff; color: #002366; font-size: 10.5px;">
+                  <span class="material-symbols-outlined fs-6">skillet</span>
+                  <span>Dapur Praktik Kuliner (KL)</span>
+                </span>
+                                    </td>
+          <td><span class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700;">KL</span></td>
+          <td>
+            <div class="small text-dark fw-semibold"><span class="material-symbols-outlined fs-6 text-success align-text-bottom">call</span> 0821-4567-8901</div>
+            <div class="text-muted small" style="font-size: 10.5px;">maya.anggraini@smkn4bojonegoro.sch.id</div>
+          </td>
+          <td class="text-center">
+            <span class="badge-status badge-status-baik">● Aktif</span>
+          </td>
+          <td class="pe-4 text-end">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Edit Data PJ" data-bs-toggle="modal" data-bs-target="#modalEditPJ-6">
+                <span class="material-symbols-outlined fs-6 align-middle text-primary">edit</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-light border p-1" title="Hapus Akun PJ" data-bs-toggle="modal" data-bs-target="#modalHapusPJ-6">
+                <span class="material-symbols-outlined fs-6 align-middle text-danger">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Modal Edit PJ -->
+        <div class="modal fade" id="modalEditPJ-6" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header text-white" style="background: #002366;">
+                <h5 class="modal-title fs-6 fw-bold">Edit Penanggung Jawab: Chef Maya Anggraini, S.Pd.</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/6" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="PUT">                <div class="modal-body p-4">
+                  <div class="row g-3">
+                    <div class="col-12 col-md-4 text-center border-end-md">
+                      <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+                      <img src="https://ui-avatars.com/api/?name=Chef+Maya+Anggraini%2C+S.Pd.&amp;background=002366&amp;color=ffffff&amp;bold=true" alt="Avatar" class="avatar-pj-lg mb-2" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #002366;">
+                      <input type="file" name="foto" class="form-control form-control-sm mt-2" accept="image/*">
+                      <small class="text-muted d-block mt-1" style="font-size: 10.5px;">JPG/PNG/WebP, Maksimal 3 MB.</small>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                          <input type="text" name="name" value="Chef Maya Anggraini, S.Pd." class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN PJ) <span class="text-danger">*</span></label>
+                          <input type="text" name="nip" value="19880715 201204 2 006" class="form-control font-monospace" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                          <input type="text" name="jabatan" value="Kepala Dapur Kuliner" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                          <select name="jurusan" class="form-select">
+                            <option value="RPL" >RPL</option>
+                            <option value="TP" >TP (Pengelasan)</option>
+                            <option value="GP" >GP (Geologi Pertambangan)</option>
+                            <option value="KL" selected>KL (Kuliner)</option>
+                            <option value="PH" >PH (Perhotelan)</option>
+                            <option value="ATR" >ATR (Peternakan)</option>
+                            <option value="Umum" >Umum</option>
+                          </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">NOMOR WHATSAPP</label>
+                          <input type="text" name="kontak" value="0821-4567-8901" class="form-control">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                          <input type="email" name="email" value="maya.anggraini@smkn4bojonegoro.sch.id" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                          <label class="form-label small fw-bold text-muted mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                          <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-light">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn-navy-slicing">Simpan Perubahan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Hapus PJ -->
+        <div class="modal fade" id="modalHapusPJ-6" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fs-6 fw-bold">Konfirmasi Hapus Akun PJ</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form action="http://localhost:8000/admin/penanggung-jawab/6" method="POST">
+                <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <div class="modal-body p-4 text-center">
+                  <span class="material-symbols-outlined text-danger mb-2" style="font-size: 48px;">warning</span>
+                  <p class="mb-1 fw-bold text-dark">Yakin ingin menghapus akun Chef Maya Anggraini, S.Pd.?</p>
+                  <small class="text-muted">NIP: 19880715 201204 2 006. Tindakan ini tidak dapat dibatalkan.</small>
+                </div>
+                <div class="modal-footer bg-light justify-content-center">
+                  <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-danger">Hapus Permanen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+              </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="p-3 px-4 border-top d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 bg-white">
+    <span class="text-muted small">Menampilkan 12 dari 15 data PJ</span>
+    <div><nav role="navigation" aria-label="Pagination Navigation">
+
+        <div class="flex gap-2 items-center justify-between sm:hidden">
+
+                            <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-md dark:text-gray-300 dark:bg-gray-700 dark:border-gray-600">
+                    pagination.previous
+                </span>
+            
+                            <a href="http://localhost:8000?page=2" rel="next" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-800 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-700 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-800 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-200">
+                    pagination.next
+                </a>
+            
+        </div>
+
+        <div class="hidden sm:flex-1 sm:flex sm:gap-2 sm:items-center sm:justify-between">
+
+            <div>
+                <p class="text-sm text-gray-700 leading-5 dark:text-gray-600">
+                    Showing
+                                            <span class="font-medium">1</span>
+                        to
+                        <span class="font-medium">12</span>
+                                        of
+                    <span class="font-medium">15</span>
+                    results
+                </p>
+            </div>
+
+            <div>
+                <span class="inline-flex rtl:flex-row-reverse shadow-sm rounded-md">
+
+                    
+                                            <span aria-disabled="true" aria-label="pagination.previous">
+                            <span class="inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-not-allowed rounded-l-md leading-5 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400" aria-hidden="true">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </span>
+                    
+                    
+                                            
+                        
+                        
+                                                                                                                        <span aria-current="page">
+                                        <span class="inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-gray-200 border border-gray-300 cursor-default leading-5 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">1</span>
+                                    </span>
+                                                                                                                                <a href="http://localhost:8000?page=2" class="inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-700 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800 hover:bg-gray-100 dark:hover:bg-gray-900" aria-label="Go to page 2">
+                                        2
+                                    </a>
+                                                                                                        
+                    
+                                            <a href="http://localhost:8000?page=2" rel="next" class="inline-flex items-center px-2 py-2 -ml-px text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md leading-5 hover:text-gray-400 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:active:bg-gray-700 dark:focus:border-blue-800 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-gray-300" aria-label="pagination.next">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                                    </span>
+            </div>
+        </div>
+    </nav>
+</div>
+  </div>
+</div>
+
+<!-- Modal Tambah PJ Baru -->
+<div class="modal fade" id="modalTambahPJ" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header text-white" style="background: #002366;">
+        <div class="d-flex align-items-center gap-2">
+          <span class="material-symbols-outlined fs-5">person_add</span>
+          <h5 class="modal-title fs-6 fw-bold mb-0">Tambah Penanggung Jawab Baru</h5>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <form action="http://localhost:8000/admin/penanggung-jawab" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">        <div class="modal-body p-4">
+          <div class="row g-3">
+            <div class="col-12 col-md-4 text-center border-end-md">
+              <label class="form-label small fw-bold text-muted d-block text-start mb-2">FOTO PROFIL (MAKS 3 MB)</label>
+              <div class="my-2">
+                <span class="material-symbols-outlined text-secondary" style="font-size: 72px;">account_circle</span>
+              </div>
+              <input type="file" name="foto" class="form-control form-control-sm" accept="image/*">
+              <small class="text-muted d-block mt-1" style="font-size: 10.5px;">Maksimal 3 MB (JPG/PNG/WebP)</small>
+            </div>
+            <div class="col-12 col-md-8">
+              <div class="row g-2">
+                <div class="col-12">
+                  <label class="form-label small fw-bold text-muted mb-1">NAMA LENGKAP & GELAR <span class="text-danger">*</span></label>
+                  <input type="text" name="name" class="form-control" placeholder="Contoh: Ahmad Fauzi, S.Kom." required>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label class="form-label small fw-bold text-muted mb-1">NIP (UNTUK LOGIN) <span class="text-danger">*</span></label>
+                  <input type="text" name="nip" class="form-control font-monospace" placeholder="19840312 200902 1 004" required>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label class="form-label small fw-bold text-muted mb-1">PASSWORD LOGIN <span class="text-danger">*</span></label>
+                  <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter" required>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label class="form-label small fw-bold text-muted mb-1">JABATAN <span class="text-danger">*</span></label>
+                  <input type="text" name="jabatan" class="form-control" placeholder="Contoh: Kepala Lab RPL" required>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label class="form-label small fw-bold text-muted mb-1">JURUSAN</label>
+                  <select name="jurusan" class="form-select">
+                    <option value="RPL">RPL</option>
+                    <option value="TP">TP (Pengelasan)</option>
+                    <option value="GP">GP (Geologi Pertambangan)</option>
+                    <option value="KL">KL (Kuliner)</option>
+                    <option value="PH">PH (Perhotelan)</option>
+                    <option value="ATR">ATR (Peternakan)</option>
+                    <option value="Umum">Umum / Lainnya</option>
+                  </select>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label class="form-label small fw-bold text-muted mb-1">NO. WHATSAPP / TELEPON</label>
+                  <input type="text" name="kontak" class="form-control" placeholder="0812-xxxx-xxxx">
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label class="form-label small fw-bold text-muted mb-1">EMAIL RESMI <span class="text-danger">*</span></label>
+                  <input type="email" name="email" class="form-control" placeholder="nama@smkn4bojonegoro.sch.id" required>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light">
+          <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn-navy-slicing">
+            <span class="material-symbols-outlined fs-5">save</span> Simpan Penanggung Jawab
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Bootstrap 5.3.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function toggleSidebarMenu() {
+      const sidebar = document.getElementById('adminSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      sidebar.classList.toggle('open');
+      backdrop.classList.toggle('show');
+    }
+  </script>
+
+  <!-- Modal Ganti Foto Profil (Semua Role) -->
+<div class="modal fade" id="modalGantiFotoProfil" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header text-white" style="background: #002366;">
+        <div class="d-flex align-items-center gap-2">
+          <span class="material-symbols-outlined fs-5">account_circle</span>
+          <h5 class="modal-title fs-6 fw-bold mb-0">Ubah Foto Profil</h5>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="http://localhost:8000/profile/foto" method="POST" enctype="multipart/form-data" id="formGantiFoto">
+        <input type="hidden" name="_token" value="4WUoOlPX1E4DEtlIRin5TV9B70bUuE6tgFDvR3de" autocomplete="off">        <div class="modal-body text-center p-4">
+          <!-- Preview Foto -->
+          <div class="position-relative d-inline-block mb-3">
+            <img id="previewFotoProfil" src="https://ui-avatars.com/api/?name=Admin&amp;background=002366&amp;color=ffffff&amp;bold=true" 
+                 alt="Foto Profil" class="rounded-circle shadow-sm border border-3 border-white" 
+                 style="width: 100px; height: 100px; object-fit: cover;">
+            <label for="inputFotoProfil" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle d-grid place-items-center cursor-pointer shadow" 
+                   style="width: 32px; height: 32px; cursor: pointer;" title="Pilih Foto Baru">
+              <span class="material-symbols-outlined fs-6">photo_camera</span>
+            </label>
+          </div>
+
+          <h6 class="fw-bold text-dark mb-0 fs-6">Admin</h6>
+          <small class="text-muted d-block mb-3" style="font-size: 11px;">Administrator Sarpras</small>
+
+          <input type="file" name="foto" id="inputFotoProfil" class="d-none" accept="image/jpeg,image/png,image/jpg,image/webp" required onchange="previewUploadFoto(this)">
+
+          <div class="p-2 bg-light rounded-2 border text-start">
+            <small class="text-muted d-block" style="font-size: 10.5px; line-height: 1.4;">
+              <span class="text-primary fw-bold">&bull; Syarat:</span> Format JPG, PNG, atau WEBP.<br>
+              <span class="text-primary fw-bold">&bull; Batas:</span> Maksimal ukuran file <b>3 MB</b>.<br>
+              <span class="text-primary fw-bold">&bull; Tampilan:</span> Disarankan rasio kotak (1:1).
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer bg-light p-2 px-3 d-flex justify-content-between">
+          <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn-navy-slicing py-1 px-3" id="btnSimpanFoto" disabled>
+            <span class="material-symbols-outlined fs-6">save</span> Simpan Foto
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function previewUploadFoto(input) {
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const maxMb = 3;
+      if (file.size > maxMb * 1024 * 1024) {
+        alert(`Ukuran foto melebihi batas maksimal ${maxMb} MB! Silakan pilih foto lain.`);
+        input.value = '';
+        document.getElementById('btnSimpanFoto').disabled = true;
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('previewFotoProfil').src = e.target.result;
+        document.getElementById('btnSimpanFoto').disabled = false;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+</script>
+  <!-- Toast Container Realtime -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1090;">
+  <div id="realtimeLiveToast" class="toast border-0 shadow-lg text-white" role="alert" aria-live="assertive" aria-atomic="true" style="background: #002366; border-radius: 10px;">
+    <div class="d-flex align-items-center p-2 px-3 border-bottom border-light border-opacity-10">
+      <span class="material-symbols-outlined fs-5 me-2 text-warning animate-pulse">notifications_active</span>
+      <strong class="me-auto text-white" id="toastTitle">Pemberitahuan Realtime</strong>
+      <small class="text-white-50" id="toastTime">Baru saja</small>
+      <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body p-3 text-white" id="toastBody" style="font-size: 12px; line-height: 1.4;">
+      Data baru terdeteksi di sistem inventaris.
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    let lastReportId = 0;
+    const currentUserRole = "admin";
+
+    function showRealtimeToast(title, message, isAlert = false) {
+      const toastEl = document.getElementById('realtimeLiveToast');
+      if (!toastEl) return;
+
+      document.getElementById('toastTitle').innerText = title;
+      document.getElementById('toastBody').innerHTML = message;
+      document.getElementById('toastTime').innerText = 'Baru saja';
+
+      if (isAlert) {
+        toastEl.style.background = '#dc2626';
+      } else {
+        toastEl.style.background = '#002366';
+      }
+
+      const toast = bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 6000 });
+      toast.show();
+    }
+
+    // Polling Realtime Engine (setiap 5 detik)
+    async function checkRealtimeUpdates() {
+      try {
+        const res = await fetch(`/api/realtime/poll?role=${currentUserRole}&last_id=${lastReportId}`, {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        if (!res.ok) return;
+
+        const data = await res.json();
+        if (data.success) {
+          // Update badge counter jika ada di navbar/sidebar
+          const badgeLaporan = document.querySelectorAll('.badge-unread-laporan, #countLap, #badgeUnreadCount');
+          badgeLaporan.forEach(el => {
+            if (data.unread_laporan_count > 0) {
+              el.innerText = data.unread_laporan_count;
+              el.style.display = '';
+            } else {
+              el.style.display = 'none';
+            }
+          });
+
+          // Notifikasi laporan baru jika ada
+          if (data.has_new && data.new_reports.length > 0) {
+            const latest = data.new_reports[0];
+            if (lastReportId > 0 && latest.id > lastReportId) {
+              if (currentUserRole === 'admin') {
+                showRealtimeToast('🔔 Laporan Baru Masuk!', `<b>${latest.pelapor}</b> mengajukan <b>${latest.jenis}</b> untuk <i>${latest.barang}</i> (${latest.ruangan}).`);
+              } else if (currentUserRole === 'pj') {
+                showRealtimeToast('✅ Status Laporan Diperbarui', `Laporan Anda untuk <b>${latest.barang}</b> telah diperbarui statusnya.`);
+              }
+            }
+            lastReportId = Math.max(lastReportId, ...data.new_reports.map(r => r.id));
+          }
+        }
+      } catch (err) {
+        // Silently skip on transient connection drop
+      }
+    }
+
+    // Inisialisasi polling dan SSE jika browser mendukung
+    window.addEventListener('DOMContentLoaded', () => {
+      // Jalankan polling awal
+      checkRealtimeUpdates();
+      setInterval(checkRealtimeUpdates, 5000);
+
+      // SSE Native Streaming
+      if (typeof(EventSource) !== "undefined") {
+        try {
+          const evtSource = new EventSource("/api/realtime/stream");
+          evtSource.onmessage = function(event) {
+            try {
+              const payload = JSON.parse(event.data);
+              if (payload.type === 'laporan_update') {
+                checkRealtimeUpdates();
+              }
+            } catch (e) {}
+          };
+          evtSource.onerror = function() {
+            evtSource.close();
+          };
+        } catch (e) {}
+      }
+    });
+  })();
+</script>
+
+    </body>
+</html>
